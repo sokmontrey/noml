@@ -14,10 +14,15 @@ function toNote(row: NoteRow): Note {
     };
 }
 
-const attempt = <A>(work: () => Promise<A>): Effect.Effect<A, Error> =>
+import { Data } from "effect";
+class NoteRepositoryError extends Data.TaggedError("NoteRepositoryError")<{
+    cause: unknown;
+}> {}
+
+const attempt = <A>(work: () => Promise<A>): Effect.Effect<A, NoteRepositoryError> =>
     Effect.tryPromise({
         try: work,
-        catch: (e) => (e instanceof Error ? e : new Error(String(e))),
+        catch: (e) => new NoteRepositoryError({ cause: e }),
     });
 
 export function makeNoteRepository(): NotePort {

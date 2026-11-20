@@ -8,14 +8,13 @@ export function makeEventBus(): EventBus {
         publish(event) {
             const set = handlers.get(event.type);
             if (!set) return Effect.void;
-            return Effect.all(
-                [...set].map((handler) => {
-                    const result = handler(event as any);
-                    if (result instanceof Effect.Effect) return result;
-                    return Effect.void;
-                }),
-                { concurrency: "unbounded" },
-            ).pipe(Effect.asVoid);
+            let effect = Effect.void;
+            for (const handler of set) {
+                const result = handler(event as any);
+                const next = result instanceof Effect.Effect ? result : Effect.void;
+                effect = Effect.flatMap(effect, () => next);
+            }
+            return effect;
         },
         subscribe(type, handler) {
             if (!handlers.has(type)) handlers.set(type, new Set());
