@@ -1,22 +1,14 @@
 import Dexie, { type Table } from "dexie";
+import { type NoteRow, NOTE_STORES } from "./schema";
 
-export interface NoteRow {
-    id: string;
-    day: string;
-    fractionalIndex: string;
-    content: string;
-    createdAt: number;
-    updatedAt: number;
-}
+export { type NoteRow } from "./schema";
 
 export class NomlDb extends Dexie {
     notes!: Table<NoteRow, string>;
 
     constructor() {
         super("noml");
-        this.version(1).stores({
-            notes: "id, day, fractionalIndex, &[day+fractionalIndex], [day+fractionalIndex], createdAt, updatedAt",
-        });
+        this.version(1).stores(NOTE_STORES);
     }
 }
 

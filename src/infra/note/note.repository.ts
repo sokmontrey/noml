@@ -37,12 +37,14 @@ export function makeNoteRepository(): NotePort {
                 return toNote(row);
             });
         },
-        listByDay(day) {
+        read(day, offset = 0, limit) {
             return attempt(async () => {
-                const rows = await db.notes
+                let query = db.notes
                     .where("[day+fractionalIndex]")
-                    .between([day, ""], [day, "\uffff"])
-                    .toArray();
+                    .between([day, ""], [day, "\uffff"]);
+                if (offset > 0) query = query.offset(offset);
+                if (limit !== undefined) query = query.limit(limit);
+                const rows = await query.toArray();
                 return rows.map(toNote);
             });
         },

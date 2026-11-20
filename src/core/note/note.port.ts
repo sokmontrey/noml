@@ -24,7 +24,7 @@ export interface NotePatch {
  */
 export interface NotePort {
     create(input: NewNote): Effect.Effect<Note, Error>;
-    listByDay(day: string): Effect.Effect<Note[], Error>;
+    read(day: string, offset?: number, limit?: number): Effect.Effect<Note[], Error>;
     update(id: string, patch: NotePatch): Effect.Effect<void, Error>;
     delete(id: string): Effect.Effect<void, Error>;
 }

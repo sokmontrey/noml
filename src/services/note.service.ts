@@ -8,7 +8,7 @@ import type { NotePort } from "../core/note/note.port";
  * `after`/`before` are the notes the new one sits between within `day`.
  */
 export interface NoteService {
-    listByDay(day: string): Effect.Effect<Note[], Error>;
+    read(day: string, offset?: number, limit?: number): Effect.Effect<Note[], Error>;
     create(
         day: string,
         content: string,
@@ -49,19 +49,19 @@ export function makeNoteService(
     ) =>
         after || before
             ? Effect.succeed(between(after, before))
-            : Effect.map(notes.listByDay(day), (existing) =>
+            : Effect.map(notes.read(day), (existing) =>
                   between(null, existing[0]),
               );
 
     return {
-        listByDay: (day) => notes.listByDay(day),
+        read: (day, offset, limit) => notes.read(day, offset, limit),
         create(day, content, after, before) {
             return Effect.flatMap(indexFor(day, after, before), (index) =>
                 notes.create({ day, content, fractionalIndex: index }),
             );
         },
         append(day, content) {
-            return Effect.flatMap(notes.listByDay(day), (existing) =>
+            return Effect.flatMap(notes.read(day), (existing) =>
                 notes.create({
                     day,
                     content,
