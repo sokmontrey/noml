@@ -12,7 +12,7 @@ export function makeEventBus(): EventBus {
             for (const handler of set) {
                 const result = handler(event as any);
                 const next = Effect.isEffect(result) ? result : Effect.void;
-                effect = Effect.flatMap(effect, () => next);
+                effect = Effect.andThen(effect, () => next);
             }
             return effect;
         },
