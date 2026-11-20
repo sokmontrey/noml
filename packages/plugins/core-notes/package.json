@@ -1,0 +1,13 @@
+{
+    "name": "@noml/plugin-core-notes",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "dependencies": {
+        "@noml/plugin-sdk": "0.1.0",
+        "effect": "^4.1.4"
+    }
+}

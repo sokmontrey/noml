@@ -1,0 +1,15 @@
+{
+    "name": "@noml/infra",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "dependencies": {
+        "@noml/core": "0.1.0",
+        "dexie": "^4.4.7",
+        "effect": "^4.1.4",
+        "fractional-indexing": "^4.0.0"
+    }
+}

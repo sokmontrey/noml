@@ -1,1 +1,0 @@
-export { coreNotesPlugin } from "./core-notes";
