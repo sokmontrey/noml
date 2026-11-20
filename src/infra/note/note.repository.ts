@@ -19,7 +19,7 @@ class NoteRepositoryError extends Data.TaggedError("NoteRepositoryError")<{
     cause: unknown;
 }> {}
 
-const attempt = <A>(work: () => Promise<A>): Effect.Effect<A, NoteRepositoryError> =>
+const attempt = <A>(work: () => Promise<A>): Effect.Effect<A, Error> =>
     Effect.tryPromise({
         try: work,
         catch: (e) => new NoteRepositoryError({ cause: e }),
