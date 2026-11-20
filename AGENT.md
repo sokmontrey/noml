@@ -55,3 +55,4 @@ src/
 - Adapters are `Layer`s.
 - UI state in Zustand vanilla stores created per provider.
 - Import from barrels; never deep-import from outside a feature.
+- Plugins expose typed contributions (capture handlers, Markdown extensions, commands, settings) and communicate only through the event bus and PluginContext.
