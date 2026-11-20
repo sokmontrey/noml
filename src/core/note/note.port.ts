@@ -1,31 +1,30 @@
 import { Effect } from "effect";
 import type { Note } from "./note";
 
+/** Fields the caller supplies; the adapter owns id/timestamps. */
+export interface NewNote {
+    day: string;
+    fractionalIndex: string;
+    content: string;
+}
+
+/**
+ * `day` and `fractionalIndex` belong together: moving a note to another day
+ * must also give it an index in that day's sequence.
+ */
+export interface NotePatch {
+    day?: string;
+    fractionalIndex?: string;
+    content?: string;
+}
+
+/**
+ * Storage only. Ordering decisions (where a note goes, when to rebalance)
+ * are the note service's job, so the port stays plain CRUD.
+ */
 export interface NotePort {
-    create(
-        content: string,
-        day: string,
-        after?: Note,
-        before?: Note,
-    ): Effect.Effect<Note, Error>;
-    appendEnd(
-        day: string,
-        content: string,
-        lastNote: Note,
-    ): Effect.Effect<Note, Error>;
-    insertBetween(
-        day: string,
-        content: string,
-        prev: Note | null,
-        next: Note | null,
-    ): Effect.Effect<Note, Error>;
-    move(
-        noteId: string,
-        toDay: string,
-        after?: Note,
-        before?: Note,
-    ): Effect.Effect<void, Error>;
-    update(id: string, content: string): Effect.Effect<void, Error>;
+    create(input: NewNote): Effect.Effect<Note, Error>;
+    listByDay(day: string): Effect.Effect<Note[], Error>;
+    update(id: string, patch: NotePatch): Effect.Effect<void, Error>;
     delete(id: string): Effect.Effect<void, Error>;
-    rebalance(day: string): Effect.Effect<void, Error>;
 }
