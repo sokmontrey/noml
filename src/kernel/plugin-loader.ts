@@ -1,6 +1,10 @@
-import { Effect } from "effect";
+import { Data, Effect } from "effect";
 import type { Plugin, PluginContext, PluginId } from "../core/plugin-api";
 import type { PluginRegistry } from "./plugin-registry";
+
+class PluginLoadError extends Data.TaggedError("PluginLoadError")<{
+    message: string;
+}> {}
 
 export interface PluginLoaderOptions {
     registry: PluginRegistry;
@@ -18,7 +22,9 @@ export function loadPlugins(options: PluginLoaderOptions) {
                 const dependency = registry.get(dep);
                 if (!dependency) {
                     return yield* Effect.fail(
-                        new Error(`Missing dependency ${dep} for ${plugin.manifest.id}`),
+                        new PluginLoadError({
+                            message: `Missing dependency ${dep} for ${plugin.manifest.id}`,
+                        }),
                     );
                 }
                 if (!loaded.has(dep)) {

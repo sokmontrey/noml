@@ -1,6 +1,6 @@
 import { Effect } from "effect";
 import type { CaptureInput, PluginContext } from "../core/plugin-api";
-import type { NotePort, NewNote } from "../core/note/note.port";
+import type { NewNote } from "../core/note/note.port";
 import type { PluginRegistry } from "./plugin-registry";
 
 export function runCapture(

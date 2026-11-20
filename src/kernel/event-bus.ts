@@ -1,5 +1,5 @@
 import { Effect } from "effect";
-import type { AppEvent, EventBus, EventHandler } from "../core/events";
+import type { EventBus, EventHandler } from "../core/events";
 
 export function makeEventBus(): EventBus {
     const handlers = new Map<string, Set<EventHandler<any>>>();
