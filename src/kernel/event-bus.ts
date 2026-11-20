@@ -8,7 +8,7 @@ export function makeEventBus(): EventBus {
         publish(event) {
             const set = handlers.get(event.type);
             if (!set) return Effect.void;
-            let effect = Effect.void;
+            let effect: Effect.Effect<void, Error> = Effect.void;
             for (const handler of set) {
                 const result = handler(event as any);
                 const next = Effect.isEffect(result) ? result : Effect.void;
