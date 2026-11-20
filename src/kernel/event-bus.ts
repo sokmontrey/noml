@@ -11,7 +11,8 @@ export function makeEventBus(): EventBus {
             return Effect.all(
                 [...set].map((handler) => {
                     const result = handler(event as any);
-                    return result instanceof Effect.Effect ? result : Effect.void;
+                    if (result instanceof Effect.Effect) return result;
+                    return Effect.void;
                 }),
                 { concurrency: "unbounded" },
             ).pipe(Effect.asVoid);
