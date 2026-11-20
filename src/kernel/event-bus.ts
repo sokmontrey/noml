@@ -11,7 +11,7 @@ export function makeEventBus(): EventBus {
             let effect = Effect.void;
             for (const handler of set) {
                 const result = handler(event as any);
-                const next = result instanceof Effect.Effect ? result : Effect.void;
+                const next = Effect.isEffect(result) ? result : Effect.void;
                 effect = Effect.flatMap(effect, () => next);
             }
             return effect;
